@@ -1,0 +1,6 @@
+uharfbuzz
+fonttools
+cairosvg
+qrcode
+pypdf
+pillow
