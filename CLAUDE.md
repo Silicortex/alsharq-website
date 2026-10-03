@@ -11,7 +11,7 @@ One-page, Arabic-first (RTL) link site for Al Sharq, a shop in Souq Al-Muradiyya
 - Preview locally: `python3 -m http.server 8765` in the repo root, then open http://localhost:8765/. Use a server, not `file://`: `index.html` references `/styles.css`, `/fonts/...` and `/assets/...` with root-absolute paths.
 - Deploy: `git push origin main`. The Vercel project `alsharq-damascus` is connected to `Silicortex/alsharq-website`, and each push to `main` goes to production in seconds. There is no preview-branch workflow in use.
 - Vercel work goes through the `vercel` CLI (logged in as the account that owns the team). The Vercel MCP connection cannot see this project (404/403), so don't rely on it.
-- Rebuild the printed business card (needs Python deps): `pip install -r brand/tools/requirements.txt && python brand/tools/make_card.py "<new number>"`.
+- Rebuild the printed business card (needs Python deps): `pip install -r brand/tools/requirements.txt && python brand/tools/make_card.py "<WhatsApp>" "<mobile>" "<landline>"`. The mobile and landline call numbers appear on the card only, never on the website (see `brand/README.md`).
 
 ## Architecture
 
