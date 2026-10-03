@@ -21,6 +21,20 @@ Hosted on Vercel (project `alsharq-damascus`, framework "Other", no build comman
 | Opening hours | commented block at the end of `<section class="info">` | Uncomment and edit when ready. |
 | Domain | `alsharq-damascus.vercel.app` | Used in canonical, `og:url`, `og:image` and the JSON-LD. Update everywhere if you add a custom domain. |
 
+## Listings
+Everywhere the shop's details live. When the phone, hours or address change, update each one:
+
+| Where | Details |
+|---|---|
+| Website | This repo — https://alsharq-damascus.vercel.app (`index.html`) |
+| Facebook | https://www.facebook.com/alsharq.damascus |
+| Instagram | https://www.instagram.com/alsharq.damascus/ |
+| WhatsApp Business | +963 938 695 132 |
+| OpenStreetMap | Node link not added yet — add it here once the node exists |
+| Google Search Console | Verified. Keep the `google-site-verification` meta tag in `index.html`. |
+| Google Business Profile | Not possible yet (Google blocks Syrian listings). Add when available. |
+| Business card | `brand/print/`; rebuild with `brand/tools/make_card.py` |
+
 ## Files
 - `index.html` — the page (Arabic first, English second), meta tags and structured data
 - `styles.css` — brand colours, layout, animation

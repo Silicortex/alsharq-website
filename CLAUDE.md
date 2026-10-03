@@ -29,6 +29,17 @@ When any of these change, update every location, then push:
 - **Domain** (`alsharq-damascus.vercel.app`): canonical, `og:url`, `og:image`, and the JSON-LD `url`, `logo` and `image`. Also in `README.md`, `brand/README.md` and `make_card.py` (the QR).
 - **Map coordinates** `33.511363, 36.305078`: the Google Maps button href (`lat%2Clng`) and JSON-LD `geo` and `hasMap`. Shop door, Plus Code `G864+G2W`; the visible Plus Code text in `.info .plus` must match.
 
+## Listings (keep in sync with the site)
+
+Shop details also live outside this repo; when the phone, hours or address change, update these too:
+
+- Facebook https://www.facebook.com/alsharq.damascus and Instagram https://www.instagram.com/alsharq.damascus/
+- WhatsApp Business: +963 938 695 132
+- OpenStreetMap: node link not added yet (add it here once it exists)
+- Google Search Console: verified; keep the `google-site-verification` meta tag in `index.html`
+- Google Business Profile: not possible yet (Google blocks Syrian listings); add when available
+- Business card: `brand/print/`, rebuilt with `brand/tools/make_card.py`
+
 ## Gotchas
 
 - Keep all Arabic text, the English line under it, and the `lang="en" dir="ltr"` attributes on English spans. The page is `dir="rtl"`, so "start" means right.
