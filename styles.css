@@ -112,6 +112,10 @@ body::after {
 .label .en { font-size: 13px; line-height: 1.4; color: var(--muted-on-stone); text-align: start; }
 .link--primary .label .en { color: var(--basalt); }
 
+/* ---------- about ---------- */
+.about { margin-top: 30px; font-size: 15.5px; line-height: 1.75; }
+.about p { margin: 0 0 6px; }
+
 /* ---------- address ---------- */
 .info {
   margin-top: 30px; padding: 18px 16px; font-size: 14.5px;
@@ -134,7 +138,7 @@ body::after {
 .band span:nth-child(2) { background: var(--stone); }
 
 /* ---------- entrance ---------- */
-.logo, .tagline, .tagline-en, .link, .info {
+.logo, .tagline, .tagline-en, .link, .about, .info {
   animation: rise 800ms var(--ease) both;
 }
 .logo { animation-name: rise-logo; animation-duration: 1100ms; }
@@ -144,7 +148,8 @@ body::after {
 .link:nth-child(2) { animation-delay: 500ms; }
 .link:nth-child(3) { animation-delay: 580ms; }
 .link:nth-child(4) { animation-delay: 660ms; }
-.info { animation-delay: 780ms; }
+.about { animation-delay: 740ms; }
+.info { animation-delay: 820ms; }
 
 @keyframes rise { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: 0 0; } }
 @keyframes rise-logo { from { opacity: 0; translate: 0 40px; scale: .92; } to { opacity: 1; translate: 0 0; scale: 1; } }
@@ -156,18 +161,19 @@ body::after {
   .page {
     max-width: 1040px; padding: 48px 40px;
     display: grid; grid-template-columns: 1fr minmax(0, 440px); column-gap: 72px;
-    grid-template-rows: auto auto; align-content: center; align-items: center;
+    grid-template-rows: auto auto auto; align-content: center; align-items: center;
   }
-  .hero { grid-row: 1 / span 2; }
+  .hero { grid-row: 1 / span 3; }
   .hero::before { width: 900px; height: 900px; top: 50%; }
   .hero::after { width: 420px; height: 420px; top: 50%; }
   .logo { height: 380px; }
   .links { grid-row: 1; margin-top: 0; align-self: end; }
-  .info { grid-row: 2; align-self: start; }
+  .about { grid-row: 2; align-self: start; }
+  .info { grid-row: 3; align-self: start; margin-top: 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .logo, .tagline, .tagline-en, .link, .info { animation: none; }
+  .logo, .tagline, .tagline-en, .link, .about, .info { animation: none; }
   .hero::before, .hero::after { animation: none; }
   .link, .link::before, .ico { transition: none; }
 }

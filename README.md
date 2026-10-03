@@ -18,6 +18,7 @@ Hosted on Vercel (project `alsharq-damascus`, framework "Other", no build comman
 | Instagram | `https://www.instagram.com/alsharq.damascus/` | Also appears in the JSON-LD `sameAs`. |
 | Facebook | `https://www.facebook.com/alsharq.damascus` | Also appears in the JSON-LD `sameAs`. |
 | Google Maps | `…/maps/search/?api=1&query=33.511363%2C36.305078` | Shop door, Plus Code `G864+G2W`. Also in JSON-LD `geo` and `hasMap`. |
+| About text | `<section class="about">` | Two lines (Arabic, English): what the shop sells. |
 | Opening hours | last two `<p>` lines of `<section class="info">` | Also `openingHoursSpecification` in the JSON-LD. |
 | Domain | `alsharq-damascus.vercel.app` | Used in canonical, `og:url`, `og:image` and the JSON-LD. Update everywhere if you add a custom domain. |
 
