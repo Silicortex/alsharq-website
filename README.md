@@ -18,7 +18,7 @@ Hosted on Vercel (project `alsharq-damascus`, framework "Other", no build comman
 | Instagram | `https://www.instagram.com/alsharq.damascus/` | Also appears in the JSON-LD `sameAs`. |
 | Facebook | `https://www.facebook.com/alsharq.damascus` | Also appears in the JSON-LD `sameAs`. |
 | Google Maps | `…/maps/search/?api=1&query=33.511363%2C36.305078` | Shop door, Plus Code `G864+G2W`. Also in JSON-LD `geo` and `hasMap`. |
-| Opening hours | commented block at the end of `<section class="info">` | Uncomment and edit when ready. |
+| Opening hours | last two `<p>` lines of `<section class="info">` | Also `openingHoursSpecification` in the JSON-LD. |
 | Domain | `alsharq-damascus.vercel.app` | Used in canonical, `og:url`, `og:image` and the JSON-LD. Update everywhere if you add a custom domain. |
 
 ## Listings
@@ -30,6 +30,7 @@ Everywhere the shop's details live. When the phone, hours or address change, upd
 | Facebook | https://www.facebook.com/alsharq.damascus |
 | Instagram | https://www.instagram.com/alsharq.damascus/ |
 | WhatsApp Business | +963 938 695 132 |
+| Opening hours | Daily 09:00–21:00 (`index.html` text and JSON-LD `openingHoursSpecification`) |
 | OpenStreetMap | Node link not added yet — add it here once the node exists |
 | Google Search Console | Verified. Keep the `google-site-verification` meta tag in `index.html`. |
 | Google Business Profile | Not possible yet (Google blocks Syrian listings). Add when available. |

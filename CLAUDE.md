@@ -35,6 +35,7 @@ Shop details also live outside this repo; when the phone, hours or address chang
 
 - Facebook https://www.facebook.com/alsharq.damascus and Instagram https://www.instagram.com/alsharq.damascus/
 - WhatsApp Business: +963 938 695 132
+- Opening hours: daily 09:00–21:00 (visible text in `index.html` and JSON-LD `openingHoursSpecification`)
 - OpenStreetMap: node link not added yet (add it here once it exists)
 - Google Search Console: verified; keep the `google-site-verification` meta tag in `index.html`
 - Google Business Profile: not possible yet (Google blocks Syrian listings); add when available
