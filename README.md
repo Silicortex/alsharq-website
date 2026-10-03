@@ -1,26 +1,32 @@
 # الشرق | Al Sharq — website
 
 One-page link site for Al Sharq Store, Souq Al-Muradiyya, Old Damascus: WhatsApp, Instagram, Facebook and directions.
-Plain HTML and CSS, no build step. Hosted on Vercel; every push to `main` redeploys.
+Plain HTML and CSS, no build step.
 
-## Before the first deploy — edit `index.html`
-| What | Find | Replace with |
+- **Live site:** https://alsharq-damascus.vercel.app
+- **Repo:** https://github.com/Silicortex/alsharq-website
+
+## Deploying
+Hosted on Vercel (project `alsharq-damascus`, framework "Other", no build command, output = repo root).
+**Every push to `main` deploys to production automatically** — edit, commit, push, and the live site updates within seconds.
+
+## Where to change things (`index.html`)
+| What | Where | Notes |
 |---|---|---|
-| WhatsApp Business number | `963XXXXXXXXX` | the number in international format, digits only (e.g. `9639…`) |
-| Instagram / Facebook handle | `alsharq.damascus` | your handle, if you chose a different one |
-| Shop location | `33.511354%2C36.305085` | the coordinates of the shop door (optional, later) |
-| Site address | `alsharq-damascus.vercel.app` | your Vercel domain, if Vercel assigns a different one |
+| WhatsApp | `href="https://wa.me/963947005841?text=…"` | Number in international format, digits only. Keep the `?text=` part. |
+| Phone in search data | `"telephone": "+963947005841"` in the JSON-LD `<script>` | Keep in sync with the WhatsApp number. |
+| Instagram | `https://www.instagram.com/alsharq.damascus/` | Also appears in the JSON-LD `sameAs`. |
+| Facebook | `https://www.facebook.com/alsharq.damascus` | Also appears in the JSON-LD `sameAs`. |
+| Google Maps | `…/maps/search/?api=1&query=33.511354%2C36.305085` | See below. Also in JSON-LD `geo` and `hasMap`. |
+| Opening hours | commented block at the end of `<section class="info">` | Uncomment and edit when ready. |
+| Domain | `alsharq-damascus.vercel.app` | Used in canonical, `og:url`, `og:image` and the JSON-LD. Update everywhere if you add a custom domain. |
 
-## Create the GitHub repo
-```bash
-cd alsharq-website
-git init -b main && git add . && git commit -m "Al Sharq website"
-gh repo create alsharq-website --private --source=. --push
-```
-(No GitHub CLI? Create an empty repo on github.com, then `git remote add origin <url> && git push -u origin main`.)
+## Map coordinates are still a placeholder
+`33.511354, 36.305085` is the Souq Al-Muradiyya area, **not the exact shop door**. To fix it: in Google Maps, long-press the door, copy the coordinates, and replace them in three places — the Maps `href` (as `lat%2Clng`), and `latitude`/`longitude` in the JSON-LD.
 
 ## Files
 - `index.html` — the page (Arabic first, English second), meta tags and structured data
-- `styles.css` — brand colours and layout
+- `styles.css` — brand colours, layout, animation
 - `assets/` — logo, icons, social preview image
 - `fonts/` — Reem Kufi and Readex Pro (SIL Open Font License, licences included)
+- `vercel.json` — clean URLs and cache headers
