@@ -17,12 +17,9 @@ Hosted on Vercel (project `alsharq-damascus`, framework "Other", no build comman
 | Phone in search data | `"telephone": "+963938695132"` in the JSON-LD `<script>` | Keep in sync with the WhatsApp number. |
 | Instagram | `https://www.instagram.com/alsharq.damascus/` | Also appears in the JSON-LD `sameAs`. |
 | Facebook | `https://www.facebook.com/alsharq.damascus` | Also appears in the JSON-LD `sameAs`. |
-| Google Maps | `…/maps/search/?api=1&query=33.511354%2C36.305085` | See below. Also in JSON-LD `geo` and `hasMap`. |
+| Google Maps | `…/maps/search/?api=1&query=33.511363%2C36.305078` | Shop door, Plus Code `G864+G2W`. Also in JSON-LD `geo` and `hasMap`. |
 | Opening hours | commented block at the end of `<section class="info">` | Uncomment and edit when ready. |
 | Domain | `alsharq-damascus.vercel.app` | Used in canonical, `og:url`, `og:image` and the JSON-LD. Update everywhere if you add a custom domain. |
-
-## Map coordinates are still a placeholder
-`33.511354, 36.305085` is the Souq Al-Muradiyya area, **not the exact shop door**. To fix it: in Google Maps, long-press the door, copy the coordinates, and replace them in three places — the Maps `href` (as `lat%2Clng`), and `latitude`/`longitude` in the JSON-LD.
 
 ## Files
 - `index.html` — the page (Arabic first, English second), meta tags and structured data

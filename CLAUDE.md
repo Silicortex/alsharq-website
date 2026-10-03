@@ -27,7 +27,7 @@ When any of these change, update every location, then push:
 - **Phone/WhatsApp**: the `wa.me/<digits>?text=...` href (keep the `?text=` part) and `"telephone": "+<digits>"` in the JSON-LD in `index.html`, plus `README.md` (the table of editable values), `brand/README.md`, and the card (`make_card.py "<number>"`, which regenerates the PDF, back SVG and previews in `brand/print/`).
 - **Instagram/Facebook handle** (`alsharq.damascus`): the two button hrefs and `sameAs` in the JSON-LD, plus `brand/README.md`. `HANDLE` and `URL` are hard-coded constants in `brand/tools/make_card.py` (the QR encodes `URL`), so edit them there and rebuild the card.
 - **Domain** (`alsharq-damascus.vercel.app`): canonical, `og:url`, `og:image`, and the JSON-LD `url`, `logo` and `image`. Also in `README.md`, `brand/README.md` and `make_card.py` (the QR).
-- **Map coordinates** `33.511354, 36.305085`: the Google Maps button href (`lat%2Clng`) and JSON-LD `geo` and `hasMap`. These are still the souq placeholder, not the exact shop door.
+- **Map coordinates** `33.511363, 36.305078`: the Google Maps button href (`lat%2Clng`) and JSON-LD `geo` and `hasMap`. Shop door, Plus Code `G864+G2W`; the visible Plus Code text in `.info .plus` must match.
 
 ## Gotchas
 
