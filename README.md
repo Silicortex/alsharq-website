@@ -31,7 +31,7 @@ Everywhere the shop's details live. When the phone, hours or address change, upd
 | Instagram | https://www.instagram.com/alsharq.damascus/ |
 | WhatsApp Business | +963 938 695 132 |
 | Opening hours | Daily 09:00–21:00 (`index.html` text and JSON-LD `openingHoursSpecification`) |
-| OpenStreetMap | Node link not added yet — add it here once the node exists |
+| OpenStreetMap | https://www.openstreetmap.org/node/14245692979 |
 | Google Search Console | Verified. Keep the `google-site-verification` meta tag in `index.html`. |
 | Google Business Profile | Not possible yet (Google blocks Syrian listings). Add when available. |
 | Business card | `brand/print/`; rebuild with `brand/tools/make_card.py` |
