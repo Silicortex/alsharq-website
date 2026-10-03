@@ -13,8 +13,8 @@ Hosted on Vercel (project `alsharq-damascus`, framework "Other", no build comman
 ## Where to change things (`index.html`)
 | What | Where | Notes |
 |---|---|---|
-| WhatsApp | `href="https://wa.me/963947005841?text=…"` | Number in international format, digits only. Keep the `?text=` part. |
-| Phone in search data | `"telephone": "+963947005841"` in the JSON-LD `<script>` | Keep in sync with the WhatsApp number. |
+| WhatsApp | `href="https://wa.me/963938695132?text=…"` | Number in international format, digits only. Keep the `?text=` part. |
+| Phone in search data | `"telephone": "+963938695132"` in the JSON-LD `<script>` | Keep in sync with the WhatsApp number. |
 | Instagram | `https://www.instagram.com/alsharq.damascus/` | Also appears in the JSON-LD `sameAs`. |
 | Facebook | `https://www.facebook.com/alsharq.damascus` | Also appears in the JSON-LD `sameAs`. |
 | Google Maps | `…/maps/search/?api=1&query=33.511354%2C36.305085` | See below. Also in JSON-LD `geo` and `hasMap`. |
