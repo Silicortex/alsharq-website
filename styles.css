@@ -132,6 +132,10 @@ body::after {
 /* ---------- footer ---------- */
 .footer { flex: 0 0 auto; text-align: center; font-size: 13px; }
 .footer p { margin: 8px 0 14px; }
+.footer .credit { margin-top: -6px; }
+.footer .credit a { color: inherit; text-underline-offset: 3px; }
+.footer .credit a:hover { color: var(--qamar); }
+.footer .credit a:focus-visible { outline: 2px solid var(--stone); outline-offset: 3px; border-radius: 2px; }
 .band { display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--basalt); }
 .band span { display: block; height: 10px; }
 .band span:nth-child(1), .band span:nth-child(3) { background: var(--basalt); }
