@@ -45,7 +45,9 @@ Shop details also live outside this repo; when the phone, hours or address chang
 
 - Keep all Arabic text, the English line under it, and the `lang="en" dir="ltr"` attributes on English spans. The page is `dir="rtl"`, so "start" means right.
 - The sunburst and grain are decorative pseudo-elements. The grain (`body::after`) is deliberately `position: absolute` and limited to the hero, not `fixed`, so scrolling stays cheap on old phones. Keep it that way.
-- `overflow-x: clip` on `html` and `body` is required: the 780px sunburst would otherwise overflow to the left in RTL and shift the page.
+- Overflow: `html` must use `overflow-x: clip` only (a full `overflow: clip` on the root becomes `hidden` for the viewport and blocks scrolling on phones). `body` uses `overflow: clip`, which stops the 780-900px sunburst from shifting the page sideways in RTL and from adding a vertical scrollbar.
+- On desktop (min-width 900px) the page is a viewport-height grid: at 100% zoom it must not scroll, down to about 1280x600. Sizes use `vh`/`clamp()` and there is a `max-height: 760px` block for short laptops. After layout changes, check `document.documentElement.scrollHeight <= innerHeight` at 1280x600, 1366x650 and 1920x950. On phones the page scrolls normally.
+- The four button icons are the services' own logos (Simple Icons paths, CC0) on colour tiles: WhatsApp `#25D366`, Instagram gradient, Facebook `#1877F2`, Google Maps `#EA4335`. WhatsApp's card is marked by an apricot ring and edge, not an apricot background.
 - Small text must stay full-strength stone on teal (no `opacity` on `.tagline-en` or `.footer p`).
 - The repo is **public** because Vercel's Hobby plan cannot connect a private organization repo. Per-deployment `*.vercel.app` URLs sit behind Vercel login (302). Only the production alias is public, which is intended.
 - Verify a deploy with `curl -s -o /dev/null -w '%{http_code}'` against `/`, `/styles.css`, both `/fonts/*.woff2` and the four `/assets/*` files (all 200).
