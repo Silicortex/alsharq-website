@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-One-page, Arabic-first (RTL) link site for Al Sharq, a shop in Souq Al-Muradiyya, Old Damascus. Plain HTML + CSS, no JS, no build step, no tests, no linter. Live at https://alsharq-damascus.vercel.app. The git root is this folder (not its parent).
+One-page, Arabic-first (RTL) link site for Al Sharq, a shop in Souq Al-Muradiyya, Old Damascus. Plain HTML + CSS, no JS, no build step, no tests, no linter. Live at https://alsharq-damascus.vercel.app.
 
 ## Commands
 
