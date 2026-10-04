@@ -4,7 +4,7 @@
 
 - Website: https://alsharq-damascus.vercel.app
 - WhatsApp: +963 938 695 132 · https://wa.me/963938695132
-- Calls (card only): mobile 0933 917 095 · landline 011 226 3552
+- Calls: mobile 0933 917 095 · landline 011 226 3552 (on the card and on the website)
 - Instagram / Facebook: @alsharq.damascus
 
 ## Files
@@ -37,5 +37,5 @@ The logo's lettering is light: on white paper, place the logo on a teal block.
 pip install -r tools/requirements.txt
 python tools/make_card.py "+963 938 695 132" "0933 917 095" "011 226 3552"
 ```
-The three numbers are: WhatsApp, mobile for calls, and the Damascus landline. The call numbers appear only on the card.
+The three numbers are: WhatsApp, mobile for calls, and the Damascus landline. The call numbers are also on the website (`index.html`).
 This rewrites `print/alsharq-business-card-print.pdf`, the back SVG and both previews. Text is converted to outlines, so the printer needs no fonts.

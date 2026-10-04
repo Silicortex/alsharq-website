@@ -11,7 +11,7 @@ One-page, Arabic-first (RTL) link site for Al Sharq, a shop in Souq Al-Muradiyya
 - Preview locally: `python3 -m http.server 8765` in the repo root, then open http://localhost:8765/. Use a server, not `file://`: `index.html` references `/styles.css`, `/fonts/...` and `/assets/...` with root-absolute paths.
 - Deploy: `git push origin main`. The Vercel project `alsharq-damascus` is connected to `Silicortex/alsharq-website`, and each push to `main` goes to production in seconds. There is no preview-branch workflow in use.
 - Vercel work goes through the `vercel` CLI (logged in as the account that owns the team). The Vercel MCP connection cannot see this project (404/403), so don't rely on it.
-- Rebuild the printed business card (needs Python deps): `pip install -r brand/tools/requirements.txt && python brand/tools/make_card.py "<WhatsApp>" "<mobile>" "<landline>"`. The mobile and landline call numbers appear on the card only, never on the website (see `brand/README.md`).
+- Rebuild the printed business card (needs Python deps): `pip install -r brand/tools/requirements.txt && python brand/tools/make_card.py "<WhatsApp>" "<mobile>" "<landline>"`. The mobile and landline call numbers are on the card and also on the website as `tel:` links.
 
 ## Architecture
 
@@ -24,6 +24,7 @@ One-page, Arabic-first (RTL) link site for Al Sharq, a shop in Souq Al-Muradiyya
 
 When any of these change, update every location, then push:
 
+- **Call numbers** (mobile `0933 917 095`, landline `011 226 3552`): the `tel:` links in `.info .calls` and the `telephone` array in the JSON-LD (international form `+963…`), plus `brand/README.md` and the card.
 - **Phone/WhatsApp**: the `wa.me/<digits>?text=...` href (keep the `?text=` part) and `"telephone": "+<digits>"` in the JSON-LD in `index.html`, plus `README.md` (the table of editable values), `brand/README.md`, and the card (`make_card.py "<number>"`, which regenerates the PDF, back SVG and previews in `brand/print/`).
 - **Instagram/Facebook handle** (`alsharq.damascus`): the two button hrefs and `sameAs` in the JSON-LD, plus `brand/README.md`. `HANDLE` and `URL` are hard-coded constants in `brand/tools/make_card.py` (the QR encodes `URL`), so edit them there and rebuild the card.
 - **Domain** (`alsharq-damascus.vercel.app`): canonical, `og:url`, `og:image`, and the JSON-LD `url`, `logo` and `image`. Also in `README.md`, `brand/README.md` and `make_card.py` (the QR).

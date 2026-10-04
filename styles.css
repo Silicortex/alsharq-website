@@ -134,6 +134,10 @@ body::after {
   background: var(--qamar); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
 }
 .info p { margin: 0 0 4px; }
+.info .calls { margin-top: 6px; }
+.info .calls a { color: inherit; font-weight: 500; letter-spacing: .02em; text-underline-offset: 3px; padding: 6px 2px; }
+.info .calls a:hover { color: var(--qamar); }
+.info .calls a:focus-visible { outline: 2px solid var(--stone); outline-offset: 2px; border-radius: 2px; }
 .info .plus { margin-top: 8px; font-weight: 500; letter-spacing: .06em; color: var(--stone); }
 
 /* ---------- footer ---------- */
