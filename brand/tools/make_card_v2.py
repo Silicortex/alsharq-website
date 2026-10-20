@@ -3,7 +3,7 @@
 Al Sharq business card, version 2: ONE face, 96x56 mm incl. 3 mm bleed (trim 90x50 mm), outlined text.
 Layout: site teal ground with a faint star lattice; logo symbol (no lettering) top-right, straight on the teal;
 name, offer and tagline; contacts with the people's names; QR (to the website) on a stone panel; address.
-Optional product photos: put .jpg/.png files in brand/products/ (up to 4, any order by file name); they fill the top-left corner.
+Optional product cutouts (transparent PNGs from tools/make_cutouts.py) in brand/products/cutouts/, up to 3 by file name, fill the top-left corner.
 Icons: WhatsApp glyph from Simple Icons (CC0); handset from Material Design Icons (Apache-2.0)."""
 import sys, os, base64, io, glob
 HERE=os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0,HERE)
@@ -79,22 +79,18 @@ body.append(f'<rect x="{R-aw:.2f}" y="165" width="{aw:.2f}" height=".6" fill="{S
 addr="سوق المرادية، آخر سوق الحميدية، دمشق القديمة"
 body.append(right(R4,addr,fit(R4,addr,9.6,aw),STONE,R,176.5))
 body.append(right(R4,HANDLE,9.6,STONE,R,187.5))
-# ---- optional product photos, top-left (brand/products/*.jpg|png, up to 4)
-PHOTOS=sorted(f for ext in ("jpg","jpeg","png","webp") for f in glob.glob(os.path.join(os.environ.get("CARD_PRODUCTS_DIR",os.path.join(OUT,"products")),"*."+ext)))[:4]
-def tile(path,x,y,w,h):
-    S=3.2; im=Image.open(path).convert("RGB"); tw,th=round(w*S),round(h*S); r=min(im.width/tw,im.height/th)
-    cw,ch=tw*r,th*r; l,t=(im.width-cw)/2,(im.height-ch)/2
-    im=im.crop((round(l),round(t),round(l+cw),round(t+ch))).resize((tw,th),Image.LANCZOS)
-    from PIL import ImageDraw
-    mask=Image.new("L",(tw,th),0); ImageDraw.Draw(mask).rounded_rectangle((0,0,tw-1,th-1),radius=round(4*S),fill=255); im.putalpha(mask)
-    b=io.BytesIO(); im.save(b,"PNG")
-    return f'<image x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>'
-PX,PY,PWD,PHT,PG=LEFT,22.0,80.0,68.0,4.0
-cells={1:[(0,0,PWD,PHT)],
-       2:[(0,0,PWD,(PHT-PG)/2),(0,(PHT+PG)/2,PWD,(PHT-PG)/2)],
-       3:[(0,0,(PWD-PG)/2,PHT),((PWD+PG)/2,0,(PWD-PG)/2,(PHT-PG)/2),((PWD+PG)/2,(PHT+PG)/2,(PWD-PG)/2,(PHT-PG)/2)],
-       4:[(0,0,(PWD-PG)/2,(PHT-PG)/2),((PWD+PG)/2,0,(PWD-PG)/2,(PHT-PG)/2),(0,(PHT+PG)/2,(PWD-PG)/2,(PHT-PG)/2),((PWD+PG)/2,(PHT+PG)/2,(PWD-PG)/2,(PHT-PG)/2)]}
-for ph,(cx_,cy_,cw_,ch_) in zip(PHOTOS,cells.get(len(PHOTOS),[])): body.append(tile(ph,PX+cx_,PY+cy_,cw_,ch_))
+# ---- optional product cutouts, top-left (brand/products/cutouts/*.png, transparent, up to 3; see tools/make_cutouts.py)
+CUTS=sorted(glob.glob(os.path.join(os.environ.get("CARD_PRODUCTS_DIR",os.path.join(OUT,"products","cutouts")),"*.png")))[:3]
+if CUTS:
+    RX0,RW,RBASE,RMAXH,CG=LEFT,88.0,90.0,68.0,3.0
+    ims=[Image.open(f).convert("RGBA") for f in CUTS]
+    asp=[im.width/im.height for im in ims]
+    hh=min(RMAXH,(RW-CG*(len(ims)-1))/sum(asp)); x=RX0+(RW-(hh*sum(asp)+CG*(len(ims)-1)))/2
+    for im,a in zip(ims,asp):
+        S=3.2; w=hh*a; b=io.BytesIO(); im.resize((max(1,round(w*S)),max(1,round(hh*S))),Image.LANCZOS).save(b,"PNG")
+        body.append(f'<image x="{x:.2f}" y="{RBASE-hh:.2f}" width="{w:.2f}" height="{hh:.2f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>'); x+=w+CG
+    body.append(f'<rect x="{RX0}" y="{RBASE+1.5}" width="{RW}" height=".6" fill="{STONE}" fill-opacity=".45"/>')
+PHOTOS=CUTS
 svg=(f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="96mm" height="56mm" viewBox="0 0 {W} {H}">'+"".join(body)+'</svg>')
 k=1452/W; m=round(11.34*k)
 os.makedirs(f"{OUT}/print/v2",exist_ok=True)
@@ -103,5 +99,5 @@ png=Image.open(io.BytesIO(cairosvg.svg2png(bytestring=svg.encode(),output_width=
 png.crop((m,m,1452-m,round(H*k)-m)).save(f"{OUT}/print/v2/alsharq-business-card-v2-preview.png")
 with open(f"{OUT}/print/v2/alsharq-business-card-v2-print.pdf","wb") as f: writer.write(f)
 open(f"{OUT}/print/v2/alsharq-business-card-v2.svg","w").write(svg)
-print("card v2 built:", NAME_WA,PHONE,"|",NAME_MOB,CALL,"|",LAND_LABEL,LAND,"| QR ->",URL,"| photos:",len(PHOTOS))
+print("card v2 built:", NAME_WA,PHONE,"|",NAME_MOB,CALL,"|",LAND_LABEL,LAND,"| QR ->",URL,"| product cutouts:",len(PHOTOS))
 print("contacts leftmost x=%.1f, QR panel right edge x=%.1f, title block width avail %.1f"%(cleft,QX+QP,topw))

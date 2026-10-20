@@ -47,7 +47,7 @@ This rewrites the files in `print/v1/` (the PDF, the back SVG and both previews)
 pip install -r tools/requirements.txt
 python tools/make_card_v2.py "+963 938 695 132" "0933 917 095" "011 226 3552" "عمر قطرميز" "يوسف قطرميز"
 ```
-Arguments: WhatsApp number, mobile, landline, then the names shown beside the WhatsApp number and the mobile. The landline row shows the label «أرضي». The names and numbers also have defaults at the top of `tools/make_card_v2.py`. Output goes to `print/v2/`: the PDF, the SVG and the preview. Optional product photos for the top-left corner go in `products/` (see its README). Text is converted to outlines, so the printer needs no fonts. Version 1 is not changed by this script.
+Arguments: WhatsApp number, mobile, landline, then the names shown beside the WhatsApp number and the mobile. The landline row shows the label «أرضي». The names and numbers also have defaults at the top of `tools/make_card_v2.py`. Output goes to `print/v2/`: the PDF, the SVG and the preview. Product cutouts for the top-left corner come from `products/cutouts/` (made by `tools/make_cutouts.py`, see `products/README.md`). Text is converted to outlines, so the printer needs no fonts. Version 1 is not changed by this script.
 
 ## Card versions
 Each card design has its own folder under `print/`, and the version is in every file name so the printer cannot mix them up.

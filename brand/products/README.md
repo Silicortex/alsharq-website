@@ -1,13 +1,14 @@
-# Product photos for business card v2
+# Product pictures for business card v2
 
-Put up to 4 product photos here (`.jpg`, `.jpeg`, `.png` or `.webp`), then rebuild the card:
+- `originals/` — the photos saved from Facebook. Kept on this computer only (git-ignored), because they are large.
+- `cutouts/` — background removed, product only, transparent PNG. **These are what the card uses** (up to 3, in file-name order). The card currently shows `image2` (men's vest), `image5` (embroidered dress), `image6` (fur coat).
 
+To change them:
 ```bash
-pip install -r brand/tools/requirements.txt
+pip install "rembg[cpu]" scipy -r brand/tools/requirements.txt     # rembg downloads a ~180 MB model on first run
+python brand/tools/make_cutouts.py brand/products/originals/<photo>.png   # writes brand/products/cutouts/<photo>.png
 python brand/tools/make_card_v2.py
 ```
-
-- Files are used in name order (`1-...`, `2-...`). 1 photo fills the corner, 2 are stacked, 3 or 4 form a grid. Photos are centre-cropped to fit.
-- Use the original, full-size photo, not a screenshot. Facebook shrinks pictures, so download from the photo's menu (Download) or use the camera originals. Print needs about 800 px or more on the short side.
-- Only use photos you own or may reuse. This folder is public on GitHub (not on the website).
-- With no photos here, the card keeps the top-left corner empty.
+- Check each cutout by eye: automatic removal can lose thin parts (it dropped the sleeves of the white dress, so that one is not used) and can keep logos, so crop leftovers out.
+- Use original-size photos, not screenshots. Only use pictures you own or may reuse; this folder is public on GitHub (not on the website).
+- With no files in `cutouts/`, the top-left corner of the card stays empty.
