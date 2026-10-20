@@ -74,12 +74,13 @@ for r in rows:
     font,t,size,col,lead=r; base=y+size*lead*0.78
     p,_=run(font,t,size,col,colR-width(font,t,size),base); fparts.append(p); y+=size*lead
 front=page(f'<image x="{lx:.3f}" y="{(H-lh_)/2:.3f}" width="{lw_:.3f}" height="{lh_}" xlink:href="data:image/png;base64,{base64.b64encode(logo).decode()}"/>'+"".join(fparts),TEAL)
+os.makedirs(f"{OUT}/print/v1",exist_ok=True)
 writer=PdfWriter(); k=1452/W; m=round(11.34*k)
 for svg,name in ((front,"front"),(back,"back")):
     writer.add_page(PdfReader(io.BytesIO(cairosvg.svg2pdf(bytestring=svg.encode()))).pages[0])
     png=Image.open(io.BytesIO(cairosvg.svg2png(bytestring=svg.encode(),output_width=1452))).convert("RGB")
-    png.crop((m,m,1452-m,round(H*k)-m)).save(f"{OUT}/print/alsharq-business-card-{name}-preview.png")
-with open(f"{OUT}/print/alsharq-business-card-print.pdf","wb") as f: writer.write(f)
-open(f"{OUT}/print/alsharq-business-card-back.svg","w").write(back)
+    png.crop((m,m,1452-m,round(H*k)-m)).save(f"{OUT}/print/v1/alsharq-business-card-v1-{name}-preview.png")
+with open(f"{OUT}/print/v1/alsharq-business-card-v1-print.pdf","wb") as f: writer.write(f)
+open(f"{OUT}/print/v1/alsharq-business-card-v1-back.svg","w").write(back)
 print("card built:", PHONE, "|", CALL, "|", LAND, "|", HANDLE)
 print("leftmost contact value x=%.1f (QR column ends ~100)" % min_x)

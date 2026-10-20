@@ -36,7 +36,7 @@ Everywhere the shop's details live. When the phone, hours or address change, upd
 | OpenStreetMap | https://www.openstreetmap.org/node/14245692979 |
 | Google Search Console | Verified. Keep the `google-site-verification` meta tag in `index.html`. |
 | Google Business Profile | Not possible yet (Google blocks Syrian listings). Add when available. |
-| Business card | `brand/print/`; rebuild with `brand/tools/make_card.py` |
+| Business cards | `brand/print/v1/` (printed) and `brand/print/v2/`; rebuild with `brand/tools/make_card.py` / `make_card_v2.py` |
 
 ## Files
 - `index.html` — the page (Arabic first, English second), meta tags and structured data

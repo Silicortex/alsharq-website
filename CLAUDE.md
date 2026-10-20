@@ -25,7 +25,7 @@ One-page, Arabic-first (RTL) link site for Al Sharq, a shop in Souq Al-Muradiyya
 When any of these change, update every location, then push:
 
 - **Call numbers** (mobile `0933 917 095`, landline `011 226 3552`): the `tel:` links in `.info .calls` and the `telephone` array in the JSON-LD (international form `+963…`), plus `brand/README.md` and both cards (v1 `make_card.py`, v2 `make_card_v2.py`).
-- **Phone/WhatsApp**: the `wa.me/<digits>?text=...` href (keep the `?text=` part) and `"telephone": "+<digits>"` in the JSON-LD in `index.html`, plus `README.md` (the table of editable values), `brand/README.md`, and the card (`make_card.py "<number>"`, which regenerates the PDF, back SVG and previews in `brand/print/`).
+- **Phone/WhatsApp**: the `wa.me/<digits>?text=...` href (keep the `?text=` part) and `"telephone": "+<digits>"` in the JSON-LD in `index.html`, plus `README.md` (the table of editable values), `brand/README.md`, and the card (`make_card.py "<number>"`, which regenerates the PDF, back SVG and previews in `brand/print/v1/`).
 - **Instagram/Facebook handle** (`alsharq.damascus`): the two button hrefs and `sameAs` in the JSON-LD, plus `brand/README.md`. `HANDLE` and `URL` are hard-coded constants in `brand/tools/make_card.py` (the QR encodes `URL`), so edit them there and rebuild the card.
 - **Domain** (`alsharq-damascus.vercel.app`): canonical, `og:url`, `og:image`, and the JSON-LD `url`, `logo` and `image`. Also in `README.md`, `brand/README.md` and `make_card.py` (the QR).
 - **Map coordinates** `33.511363, 36.305078`: the Google Maps button href (`lat%2Clng`) and JSON-LD `geo` and `hasMap`. Shop door, Plus Code `G864+G2W`; the visible Plus Code text in `.info .plus` must match.
@@ -40,7 +40,7 @@ Shop details also live outside this repo; when the phone, hours or address chang
 - OpenStreetMap: https://www.openstreetmap.org/node/14245692979
 - Google Search Console: verified; keep the `google-site-verification` meta tag in `index.html`
 - Google Business Profile: not possible yet (Google blocks Syrian listings); add when available
-- Business card: `brand/print/`, rebuilt with `brand/tools/make_card.py`
+- Business cards: one folder per version under `brand/print/` (`v1/` two-face, printed; `v2/` one-face with names), rebuilt with `brand/tools/make_card.py` and `make_card_v2.py`. A new design goes in a new `vN/` folder and script; never overwrite an older version
 
 ## Gotchas
 
