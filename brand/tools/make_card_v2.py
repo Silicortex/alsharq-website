@@ -47,7 +47,7 @@ body.append(f'<defs><pattern id="lat" width="44" height="44" patternUnits="userS
 body.append(f'<rect width="{W}" height="{H}" fill="{TEAL}"/><rect width="{W}" height="{H}" fill="url(#lat)"/>')
 # ---- logo symbol (no lettering), straight on the teal, top-right
 sym=open(os.path.join(OUT,"logo","alsharq-symbol.png"),"rb").read(); sw,sh=Image.open(io.BytesIO(sym)).size
-SH=68.0; SW=SH*sw/sh; SX=R-SW; SY=22.0
+SH=66.0; SW=SH*sw/sh; SX=R-SW; SY=24.0
 body.append(f'<image x="{SX:.3f}" y="{SY}" width="{SW:.3f}" height="{SH}" xlink:href="data:image/png;base64,{base64.b64encode(sym).decode()}"/>')
 # ---- optional product cutouts: a large lineup on the left edge, bottom-aligned, fading into the teal toward the text
 CUTS=sorted(glob.glob(os.path.join(os.environ.get("CARD_PRODUCTS_DIR",os.path.join(OUT,"products","cutouts")),"*.png")))[:3]
@@ -70,7 +70,7 @@ if BG_MODE or MIX_MODE:
     b=io.BytesIO(); Image.fromarray(a).save(b,"PNG")
     body.append(f'<image x="0" y="0" width="{BW}" height="{H:.3f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>')
     if BG_MODE: CUTS=[]
-BAND_Y=165.0
+BAND_Y=164.5
 body.append(f'<rect x="0" y="{BAND_Y}" width="{W}" height="{H-BAND_Y:.2f}" fill="#174F54"/><rect x="0" y="{BAND_Y}" width="{W}" height=".8" fill="{STONE}" fill-opacity=".35"/>')
 if CUTS:
     import numpy as np
@@ -95,12 +95,18 @@ if CUTS:
 PHOTOS=CUTS
 # ---- name and offer, left of the logo
 TR=SX-14; topw=TR-LEFT
-body.append(right(RK7,"متجر الشرق",fit(RK7,"متجر الشرق",34,topw),STONE,TR,45))
-body.append(right(R4,"Al Sharq Store",fit(R4,"Al Sharq Store",11.5,topw),STONE,TR,60))
-off=["ألبسة رجالية ونسائية وولادية","هدايا وتذكارات وأقمشة"]; osz=min(fit(R5,t,9.2,topw) for t in off)
-for i,t in enumerate(off): body.append(right(R5,t,osz,STONE,TR,73+10.8*i))
+body.append(right(RK7,"متجر الشرق",fit(RK7,"متجر الشرق",32,topw),STONE,TR,46))
+body.append(right(R4,"Al Sharq Store",fit(R4,"Al Sharq Store",11.5,topw),STONE,TR,61))
+# what we sell: small text, items joined by an apricot "+"
+OFF_LINES=[["ألبسة رجالية","نسائية","ولادية"],["هدايا","تذكارات","أقمشة","صابون"]]
+OSZ=9.0; PG=3.2; pw=width(R6,"+",OSZ)
+for li,items in enumerate(OFF_LINES):
+    x=TR; base=75+10.5*li
+    for k,t in enumerate(items):
+        w=width(R5,t,OSZ); body.append(run(R5,t,OSZ,STONE,x-w,base)); x-=w
+        if k<len(items)-1: body.append(run(R6,"+",OSZ,QAMAR,x-PG-pw,base)); x-=2*PG+pw
 TAG="حيث تنتهي الحميدية… يبدأ الشرق"
-body.append(right(RK6,TAG,fit(RK6,TAG,13,R-LEFT),STONE,R,103.5))
+body.append(right(RK6,TAG,fit(RK6,TAG,13,R-LEFT),STONE,R,104))
 # ---- contacts: icon | name | number
 ICON=13.0; GAP=7.0
 rows=[(WA_PATH,"#25D366",NAME_WA,PHONE),(CALL_PATH,QAMAR,NAME_MOB,CALL),(CALL_PATH,QAMAR,LAND_LABEL,LAND)]
@@ -108,7 +114,7 @@ SZ_N=11.5; SZ_T=10.5
 name_w=max(width(R5,r[2],SZ_T) for r in rows)
 name_right=R-ICON-GAP; num_right=name_right-name_w-12
 for i,(path,col,name,num) in enumerate(rows):
-    b=121+16.5*i
+    b=124+15.5*i
     body.append(f'<rect x="{R-ICON:.2f}" y="{b-ICON+3:.2f}" width="{ICON}" height="{ICON}" rx="3.2" fill="{col}"/>')
     s=(ICON*0.62)/24; ox=R-ICON+ICON*0.19; oy=b-ICON+3+ICON*0.19
     body.append(f'<path transform="translate({ox:.3f} {oy:.3f}) scale({s:.4f})" fill="#fff" d="{path}"/>')
@@ -116,17 +122,17 @@ for i,(path,col,name,num) in enumerate(rows):
     body.append(right(R6,num,SZ_N,STONE,num_right,b))
 cleft=num_right-max(width(R6,r[3],SZ_N) for r in rows)
 # ---- QR on a stone panel (dark modules on light = scans reliably), under the logo side
-QP=56.0; QM=4.5; QX=LEFT; QY=22.0
+QP=56.0; QM=4.5; QX=LEFT; QY=24.0
 body.append(f'<rect x="{QX}" y="{QY}" width="{QP}" height="{QP}" rx="5" fill="{STONE}"/>')
 body.append(qr_rects(QX+QM,QY+QM,QP-2*QM,BAS))
 qc=QX+QP/2
 # ---- address and handle, right block
 aw=R-139.0
 addr="سوق المرادية، آخر سوق الحميدية، دمشق القديمة"
-body.append(right(R4,addr,fit(R4,addr,9.6,aw),STONE,R,175.5))
+body.append(right(R4,addr,fit(R4,addr,9.6,aw),STONE,R,174.5))
 # separate line for the username, with the logos of the two services it belongs to (Instagram, Facebook)
-body.append(f'<rect x="{R-aw:.2f}" y="179.2" width="{aw:.2f}" height=".6" fill="{STONE}" fill-opacity=".35"/>')
-T=9.6; TY=180.9; TG=3.0
+body.append(f'<rect x="{R-aw:.2f}" y="178.2" width="{aw:.2f}" height=".6" fill="{STONE}" fill-opacity=".35"/>')
+T=9.2; TY=179.6; TG=3.0
 body.append('<defs><radialGradient id="ig" cx="30%" cy="107%" r="140%"><stop offset="0" stop-color="#FDF497"/><stop offset=".05" stop-color="#FDF497"/><stop offset=".45" stop-color="#FD5949"/><stop offset=".6" stop-color="#D6249F"/><stop offset=".9" stop-color="#285AEB"/></radialGradient></defs>')
 for k,(path,fill) in enumerate(((IG_PATH,"url(#ig)"),(FB_PATH,"#1877F2"))):
     tx=R-T-k*(T+TG)
