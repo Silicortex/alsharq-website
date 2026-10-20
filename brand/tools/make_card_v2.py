@@ -132,8 +132,7 @@ qc=QX+QP/2
 aw=R-139.0
 addr="سوق المرادية، آخر سوق الحميدية، دمشق القديمة"
 body.append(right(R4,addr,fit(R4,addr,9.6,aw),STONE,R,174.5))
-# separate line for the username, with the logos of the two services it belongs to (Instagram, Facebook)
-body.append(f'<rect x="{R-aw:.2f}" y="178.2" width="{aw:.2f}" height=".6" fill="{STONE}" fill-opacity=".35"/>')
+# username on its own line (no extra rule: the band's top edge is the footer line), with the logos of the two services it belongs to (Instagram, Facebook)
 T=9.2; TY=179.6; TG=3.0
 body.append('<defs><radialGradient id="ig" cx="30%" cy="107%" r="140%"><stop offset="0" stop-color="#FDF497"/><stop offset=".05" stop-color="#FDF497"/><stop offset=".45" stop-color="#FD5949"/><stop offset=".6" stop-color="#D6249F"/><stop offset=".9" stop-color="#285AEB"/></radialGradient></defs>')
 for k,(path,fill) in enumerate(((IG_PATH,"url(#ig)"),(FB_PATH,"#1877F2"))):
