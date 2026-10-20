@@ -58,3 +58,6 @@ Each card design has its own folder under `print/`, and the version is in every 
 | `print/v2/` (three variants: side lineup, `-background`, `-mix`) | One face on the site's teal with a faint star lattice: logo symbol (no lettering) top-right, name and offer in stone, contacts with the people's names, QR to the website on a stone panel (top-left), product cutouts along the left edge, address. (Earlier drafts with a teal panel and with stone paper are in the git history.) | `tools/make_card_v2.py` |
 
 For a new design, add `tools/make_card_v3.py` that writes to `print/v3/` and add a row here. Do not overwrite an older version.
+
+## A4 print sheet
+`python tools/make_sheet.py print/v2/alsharq-business-card-v2-mix-print.pdf` puts 8 copies of a card on one A4 page with crop marks at the 90 × 50 mm trim corners (`...-A4-sheet.pdf` and only the card dependencies). Print at 100% / "actual size", never "fit to page". Rebuild the sheet after every card change.
