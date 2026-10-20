@@ -17,6 +17,8 @@
 | `logo/alsharq-profile-picture-1080.png` | Profile picture, symbol only | Small avatars |
 | `social/alsharq-facebook-cover-1640x624.jpg` | Facebook cover | Facebook page |
 | `print/alsharq-business-card-print.pdf` | Business card, 2 pages, 96 × 56 mm incl. 3 mm bleed | For the printer: double-sided, trim to 90 × 50 mm |
+| `print/alsharq-business-card-v2-print.pdf` | Business card version 2, ONE face (everything on the front: logo panel, offer, contacts with names, address), 96 × 56 mm incl. 3 mm bleed | For the printer: single-sided, trim to 90 × 50 mm |
+| `print/alsharq-business-card-v2-preview.png`, `print/alsharq-business-card-v2.svg` | Preview, and the vector source | Checking; editing in CorelDraw or Illustrator |
 | `print/*-preview.png`, `print/alsharq-business-card-back.svg` | Previews, and the back as vector | Checking; editing in CorelDraw or Illustrator |
 | `qr/alsharq-qr-website.*` | QR to the website | Card, sign, bags |
 | `fonts/` | Reem Kufi (name, headlines), Readex Pro (all other text) | SIL Open Font License, licences included |
@@ -39,3 +41,10 @@ python tools/make_card.py "+963 938 695 132" "0933 917 095" "011 226 3552"
 ```
 The three numbers are: WhatsApp, mobile for calls, and the Damascus landline. The call numbers are also on the website (`index.html`).
 This rewrites `print/alsharq-business-card-print.pdf`, the back SVG and both previews. Text is converted to outlines, so the printer needs no fonts.
+
+## Rebuild business card version 2 (one face, names beside the numbers)
+```bash
+pip install -r tools/requirements.txt
+python tools/make_card_v2.py "+963 938 695 132" "0933 917 095" "011 226 3552" "عمر قطرميز" "يوسف قطرميز"
+```
+Arguments: WhatsApp number, mobile, landline, then the names shown beside the WhatsApp number and the mobile. The landline row shows the label «أرضي». The names and numbers also have defaults at the top of `tools/make_card_v2.py`. Output: `print/alsharq-business-card-v2-print.pdf`, `print/alsharq-business-card-v2.svg` and `print/alsharq-business-card-v2-preview.png`. Text is converted to outlines, so the printer needs no fonts. Version 1 is not changed by this script.
