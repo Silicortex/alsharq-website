@@ -13,8 +13,5 @@ python brand/tools/make_card_v2.py
 - Use original-size photos, not screenshots. Only use pictures you own or may reuse; this folder is public on GitHub (not on the website).
 - They stand large along the left edge of the card, fading into the teal toward the text. With no files in `cutouts/`, that area stays empty.
 
-## Background version
-`background/` holds landscape crops (about 2.5:1, logos cropped out) used by the background variant of the card: `image4.jpg` (fabrics), `image8.jpg` (shirts), `image9.jpg` (vests). They are stacked down the left side, cross-faded into each other and faded into the teal toward the text. Build it with `python brand/tools/make_card_v2.py --background`. (`image8.png` is an exact duplicate of `image.png`, the shirts photo.)
-
-## Mix version
-`python brand/tools/make_card_v2.py --mix` uses both folders: the `background/` crops faded across the whole card, and the `cutouts/` standing in front with a soft shadow.
+## Background image (background and mix versions)
+`background/background-image.png` is the one image used behind the card: an old souq scene (fabrics, lanterns, striped arches, mosque). The script crops a card-shaped band from it (a little below the centre) and fades it into the teal. Replace the file to change the background, any size, ideally 1500 px or more on the short side. `python brand/tools/make_card_v2.py --background` puts it behind the left half only; `--mix` puts it behind the whole card, with the `cutouts/` standing in front with a soft shadow. The default side-lineup version has no background photo.

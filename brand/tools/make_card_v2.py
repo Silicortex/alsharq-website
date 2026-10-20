@@ -52,19 +52,20 @@ SH=66.0; SW=SH*sw/sh; SX=R-SW; SY=24.0
 CUTS=sorted(glob.glob(os.path.join(os.environ.get("CARD_PRODUCTS_DIR",os.path.join(OUT,"products","cutouts")),"*.png")))[:3]
 if BG_MODE or MIX_MODE:
     import numpy as np
-    BGP=sorted(glob.glob(os.path.join(OUT,"products","background","*.jpg")))[:3]
+    BGP=sorted(f for ext in ("png","jpg") for f in glob.glob(os.path.join(OUT,"products","background","*."+ext)))[:1]   # one background image
     BW=(W if MIX_MODE else 190.0); S=3.2; th=H/max(1,len(BGP)); OVL=12.0; cv=Image.new("RGBA",(round(BW*S),round(H*S)),(0,0,0,0))
     for bi,bf in enumerate(BGP):                                       # tiles overlap and cross-fade, so there are no hard seams
         y0=max(0.0,bi*th-OVL); y1=min(H,(bi+1)*th+OVL); tw,tt=round(BW*S),round((y1-y0)*S)
         im=Image.open(bf).convert("RGB"); r=min(im.width/tw,im.height/tt); cw,ch=tw*r,tt*r
-        im=im.crop((round((im.width-cw)/2),round((im.height-ch)/2),round((im.width+cw)/2),round((im.height+ch)/2))).resize((tw,tt),Image.LANCZOS).convert("RGBA")
+        oy=(im.height-ch)*0.62                                          # crop band sits a little below centre (keeps fabrics and mosque)
+        im=im.crop((round((im.width-cw)/2),round(oy),round((im.width+cw)/2),round(oy+ch))).resize((tw,tt),Image.LANCZOS).convert("RGBA")
         ys=(np.arange(tt)/S)[:,None]; fade=np.ones((tt,1))
         if bi>0: fade=np.minimum(fade,np.clip(ys/(2*OVL),0,1))
         if bi<len(BGP)-1: fade=np.minimum(fade,np.clip(((y1-y0)-ys)/(2*OVL),0,1))
         t=np.array(im); t[...,3]=(255*fade[:,0:1].repeat(tw,1)).astype(np.uint8)
         cv.alpha_composite(Image.fromarray(t),(0,round(y0*S)))
     a=np.array(cv); xs=(np.arange(a.shape[1])/S)[None,:]
-    if MIX_MODE: a[...,3]=(a[...,3]*(0.70-0.38*xs/W)).astype(np.uint8)         # whole card: 70% at the left edge down to 32% at the right
+    if MIX_MODE: a[...,3]=(a[...,3]*(0.58-0.28*xs/W)).astype(np.uint8)         # whole card: 58% at the left edge down to 30% at the right
     else: a[...,3]=(a[...,3]*0.55*np.clip((BW-xs)/(BW-70),0,1)).astype(np.uint8)   # 55% at the left edge, solid teal again by x=190
     b=io.BytesIO(); Image.fromarray(a).save(b,"PNG")
     body.append(f'<image x="0" y="0" width="{BW}" height="{H:.3f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>')
