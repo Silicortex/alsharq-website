@@ -1,7 +1,7 @@
 """Usage: python tools/make_card_v2.py "<WhatsApp>" "<mobile>" "<landline>" ["<WhatsApp contact name>" "<mobile contact name>"]
        e.g. python tools/make_card_v2.py "+963 938 695 132" "0933 917 095" "011 226 3552"
 Al Sharq business card, version 2: ONE face, 96x56 mm incl. 3 mm bleed (trim 90x50 mm), outlined text.
-Layout: teal panel with the logo (start side), stone paper with name, offer, contacts with names, address.
+Layout: stone lattice paper on the whole face; logo symbol (no lettering) on a teal tile in the top-right corner; name, offer, contacts with names, address.
 Icons: WhatsApp glyph from Simple Icons (CC0); handset from Material Design Icons (Apache-2.0)."""
 import sys, os, base64, io, math
 HERE=os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0,HERE)
@@ -28,36 +28,28 @@ def right(font,t,size,fill,xr,base): return run(font,t,size,fill,xr-width(font,t
 def fit(font,t,size,maxw):
     w=width(font,t,size); return size if w<=maxw else size*maxw/w
 
-W,H=362.835,211.654; R=W-26; PW=110.0; STRIP=5.0; LEFT=PW+STRIP+16     # text region: LEFT..R
+W,H=362.835,211.654; R=W-26; LEFT=26.0     # text region: LEFT..R
 body=[]
 # ---- ground: stone paper with an eight-point star lattice
 body.append(f'<rect width="{W}" height="{H}" fill="{STONE}"/>')
 body.append(f'<defs><pattern id="lat" width="44" height="44" patternUnits="userSpaceOnUse"><g fill="none" stroke="{TEAL}" stroke-opacity=".08" stroke-width=".6"><rect x="11" y="11" width="22" height="22"/><rect x="11" y="11" width="22" height="22" transform="rotate(45 22 22)"/><circle cx="22" cy="22" r="15.6"/></g></pattern>'
-            f'<clipPath id="pc"><rect width="{PW}" height="{H}"/></clipPath></defs>')
-body.append(f'<rect x="{PW}" width="{W-PW}" height="{H}" fill="url(#lat)"/>')
-# ---- teal panel with sunburst and logo
-cx=(11.34+PW)/2; cy=H/2-8
-body.append(f'<rect width="{PW}" height="{H}" fill="{TEAL}"/>')
-rays=[]; N=24
-for i in range(N):
-    a0=math.radians(i*360/N); a1=math.radians(i*360/N+180/N); r=260
-    rays.append(f'<polygon points="{cx:.2f},{cy:.2f} {cx+r*math.cos(a0):.2f},{cy+r*math.sin(a0):.2f} {cx+r*math.cos(a1):.2f},{cy+r*math.sin(a1):.2f}"/>')
-body.append(f'<g clip-path="url(#pc)" fill="{QAMAR}" fill-opacity=".11">{"".join(rays)}</g>')
-logo=open(os.path.join(OUT,"logo","alsharq-logo.png"),"rb").read(); lw,lh=Image.open(io.BytesIO(logo)).size
-LH=140; LW=LH*lw/lh
-body.append(f'<image x="{cx-LW/2:.3f}" y="{(H-LH)/2:.3f}" width="{LW:.3f}" height="{LH}" xlink:href="data:image/png;base64,{base64.b64encode(logo).decode()}"/>')
-# ---- ablaq strip between the panels
-seg=10.0; y=0.0; k=0
-while y<H:
-    body.append(f'<rect x="{PW}" y="{y:.2f}" width="{STRIP}" height="{min(seg,H-y):.2f}" fill="{BAS if k%2==0 else "#F6EFE0"}"/>'); y+=seg; k+=1
+            f'</defs>')
+body.append(f'<rect width="{W}" height="{H}" fill="url(#lat)"/>')
+# ---- logo symbol (no lettering) on a teal tile, top-right corner
+BW,BH=56.0,66.0; BX=R-BW; BY=22.0
+body.append(f'<rect x="{BX}" y="{BY}" width="{BW}" height="{BH}" rx="6" fill="{TEAL}"/>')
+sym=open(os.path.join(OUT,"logo","alsharq-symbol.png"),"rb").read(); sw,sh=Image.open(io.BytesIO(sym)).size
+SH=BH-14; SW=SH*sw/sh
+body.append(f'<image x="{BX+(BW-SW)/2:.3f}" y="{BY+(BH-SH)/2:.3f}" width="{SW:.3f}" height="{SH:.3f}" xlink:href="data:image/png;base64,{base64.b64encode(sym).decode()}"/>')
 # ---- text
 maxw=R-LEFT
-body.append(right(RK7,"متجر الشرق",fit(RK7,"متجر الشرق",27,maxw),BAS,R,47))
-body.append(right(R4,"Al Sharq Store",fit(R4,"Al Sharq Store",10.5,maxw),MUT,R,61))
-off=["ألبسة رجالية ونسائية وولادية","هدايا وتذكارات وأقمشة"]; osz=min(fit(R5,t,10.5,maxw) for t in off)
-for i,t in enumerate(off): body.append(right(R5,t,osz,TEAL,R,79+13*i))
+TR=BX-14; topw=TR-LEFT          # the title block sits left of the logo tile
+body.append(right(RK7,"متجر الشرق",fit(RK7,"متجر الشرق",32,topw),BAS,TR,47))
+body.append(right(R4,"Al Sharq Store",fit(R4,"Al Sharq Store",11.5,topw),MUT,TR,67))
+off=["ألبسة رجالية ونسائية وولادية","هدايا وتذكارات وأقمشة"]; osz=min(fit(R5,t,11,topw) for t in off)
+for i,t in enumerate(off): body.append(right(R5,t,osz,TEAL,TR,84+13*i))
 # small ablaq rule
-for j in range(4): body.append(f'<rect x="{R-40+j*10:.2f}" y="101" width="10" height="3.2" fill="{BAS if j%2==0 else TEAL}"/>')
+for j in range(4): body.append(f'<rect x="{R-40+j*10:.2f}" y="107" width="10" height="3.2" fill="{BAS if j%2==0 else TEAL}"/>')
 # contacts: icon | name | number
 ICON=13.0; GAP=7.0
 rows=[(WA_PATH,"#25D366",NAME_WA,PHONE,BAS),(CALL_PATH,TEAL,NAME_MOB,CALL,BAS),(CALL_PATH,TEAL,LAND_LABEL,LAND,MUT)]
@@ -66,17 +58,17 @@ name_w=max(width(R5,r[2],SZ_T) for r in rows)
 name_right=R-ICON-GAP; num_right=name_right-name_w-12
 tot=R-(num_right-max(width(R6,r[3],SZ_N) for r in rows))
 for i,(path,col,name,num,ncol) in enumerate(rows):
-    b=119+16*i
+    b=124+16*i
     body.append(f'<rect x="{R-ICON:.2f}" y="{b-ICON+3:.2f}" width="{ICON}" height="{ICON}" rx="3.2" fill="{col}"/>')
     s=(ICON*0.62)/24; ox=R-ICON+ICON*0.19; oy=b-ICON+3+ICON*0.19
     body.append(f'<path transform="translate({ox:.3f} {oy:.3f}) scale({s:.4f})" fill="#fff" d="{path}"/>')
     body.append(right(R5,name,SZ_T,TEAL if i<2 else MUT,name_right,b))
     body.append(right(R6,num,SZ_N,ncol,num_right,b))
 # address and online
-body.append(right(R4,"سوق المرادية، آخر سوق الحميدية، دمشق القديمة",fit(R4,"سوق المرادية، آخر سوق الحميدية، دمشق القديمة",9.6,maxw),BAS,R,172))
+body.append(right(R4,"سوق المرادية، آخر سوق الحميدية، دمشق القديمة",fit(R4,"سوق المرادية، آخر سوق الحميدية، دمشق القديمة",9.6,maxw),BAS,R,176))
 online=f"{HANDLE} · {SITE}"; osz2=fit(R4,online,9.2,maxw)
-body.append(right(R4,online,osz2,MUT,R,183))
-body.append(f'<rect x="{LEFT}" y="160" width="{R-LEFT}" height=".6" fill="{BAS}" fill-opacity=".30"/>')
+body.append(right(R4,online,osz2,MUT,R,187))
+body.append(f'<rect x="{LEFT}" y="164.5" width="{R-LEFT}" height=".6" fill="{BAS}" fill-opacity=".30"/>')
 svg=(f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="96mm" height="56mm" viewBox="0 0 {W} {H}">'+"".join(body)+'</svg>')
 k=1452/W; m=round(11.34*k)
 os.makedirs(f"{OUT}/print/v2",exist_ok=True)
