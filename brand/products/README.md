@@ -15,3 +15,6 @@ python brand/tools/make_card_v2.py
 
 ## Background version
 `background/` holds landscape crops (about 2.5:1, logos cropped out) used by the background variant of the card: `image4.jpg` (fabrics), `image8.jpg` (shirts), `image9.jpg` (vests). They are stacked down the left side, cross-faded into each other and faded into the teal toward the text. Build it with `python brand/tools/make_card_v2.py --background`. (`image8.png` is an exact duplicate of `image.png`, the shirts photo.)
+
+## Mix version
+`python brand/tools/make_card_v2.py --mix` uses both folders: the `background/` crops faded across the whole card, and the `cutouts/` standing in front with a soft shadow.
