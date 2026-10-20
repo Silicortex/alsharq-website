@@ -68,6 +68,8 @@ if BG_MODE or MIX_MODE:
     b=io.BytesIO(); Image.fromarray(a).save(b,"PNG")
     body.append(f'<image x="0" y="0" width="{BW}" height="{H:.3f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>')
     if BG_MODE: CUTS=[]
+BAND_Y=167.0
+body.append(f'<rect x="0" y="{BAND_Y}" width="{W}" height="{H-BAND_Y:.2f}" fill="#174F54"/><rect x="0" y="{BAND_Y}" width="{W}" height=".8" fill="{STONE}" fill-opacity=".35"/>')
 if CUTS:
     import numpy as np
     S=3.2; CW,CH=150.0,H; FEET=193.0; PH=(112.0 if MIX_MODE else 104.0)                       # canvas width, items height, feet line (inside the trim)
@@ -93,10 +95,10 @@ PHOTOS=CUTS
 TR=SX-14; topw=TR-LEFT
 body.append(right(RK7,"متجر الشرق",fit(RK7,"متجر الشرق",34,topw),STONE,TR,45))
 body.append(right(R4,"Al Sharq Store",fit(R4,"Al Sharq Store",11.5,topw),STONE,TR,60))
-off=["ألبسة رجالية ونسائية وولادية","هدايا وتذكارات وأقمشة"]; osz=min(fit(R5,t,11,topw) for t in off)
-for i,t in enumerate(off): body.append(right(R5,t,osz,STONE,TR,76+12.5*i))
+off=["ألبسة رجالية ونسائية وولادية","هدايا وتذكارات وأقمشة"]; osz=min(fit(R5,t,9.2,topw) for t in off)
+for i,t in enumerate(off): body.append(right(R5,t,osz,STONE,TR,73+10.8*i))
 TAG="حيث تنتهي الحميدية… يبدأ الشرق"
-body.append(right(RK6,TAG,fit(RK6,TAG,13,R-LEFT),STONE,R,107))
+body.append(right(RK6,TAG,fit(RK6,TAG,13,R-LEFT),STONE,R,103.5))
 # ---- contacts: icon | name | number
 ICON=13.0; GAP=7.0
 rows=[(WA_PATH,"#25D366",NAME_WA,PHONE),(CALL_PATH,QAMAR,NAME_MOB,CALL),(CALL_PATH,QAMAR,LAND_LABEL,LAND)]
@@ -104,7 +106,7 @@ SZ_N=11.5; SZ_T=10.5
 name_w=max(width(R5,r[2],SZ_T) for r in rows)
 name_right=R-ICON-GAP; num_right=name_right-name_w-12
 for i,(path,col,name,num) in enumerate(rows):
-    b=127+15*i
+    b=121+16.5*i
     body.append(f'<rect x="{R-ICON:.2f}" y="{b-ICON+3:.2f}" width="{ICON}" height="{ICON}" rx="3.2" fill="{col}"/>')
     s=(ICON*0.62)/24; ox=R-ICON+ICON*0.19; oy=b-ICON+3+ICON*0.19
     body.append(f'<path transform="translate({ox:.3f} {oy:.3f}) scale({s:.4f})" fill="#fff" d="{path}"/>')
@@ -119,10 +121,9 @@ qc=QX+QP/2
 body.append(center(R5,"امسح للتواصل",8.6,STONE,qc,QY+QP+10))
 # ---- address and handle, right block
 aw=R-139.0
-body.append(f'<rect x="{R-aw:.2f}" y="165" width="{aw:.2f}" height=".6" fill="{STONE}" fill-opacity=".45"/>')
 addr="سوق المرادية، آخر سوق الحميدية، دمشق القديمة"
-body.append(right(R4,addr,fit(R4,addr,9.6,aw),STONE,R,176.5))
-body.append(right(R4,HANDLE,9.6,STONE,R,187.5))
+body.append(right(R4,addr,fit(R4,addr,9.6,aw),STONE,R,178.5))
+body.append(right(R4,HANDLE,9.6,STONE,R,189))
 svg=(f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="96mm" height="56mm" viewBox="0 0 {W} {H}">'+"".join(body)+'</svg>')
 k=1452/W; m=round(11.34*k)
 os.makedirs(f"{OUT}/print/v2",exist_ok=True)
