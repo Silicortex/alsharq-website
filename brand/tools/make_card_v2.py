@@ -2,8 +2,8 @@
        e.g. python tools/make_card_v2.py "+963 938 695 132" "0933 917 095" "011 226 3552"
 Al Sharq business card, version 2: ONE face, 96x56 mm incl. 3 mm bleed (trim 90x50 mm), outlined text.
 Layout: site teal ground with a faint star lattice; logo symbol (no lettering) top-right, straight on the teal;
-name, offer and tagline; contacts with the people's names; QR (to the website) on a stone panel; address.
-Optional product cutouts (transparent PNGs from tools/make_cutouts.py) in brand/products/cutouts/, up to 3 by file name, fill the top-left corner.
+name, offer and tagline; contacts with the people's names; QR (to the website) on a stone panel, top-left; address.
+Optional product cutouts (transparent PNGs from tools/make_cutouts.py) in brand/products/cutouts/, up to 3 by file name, stand large along the left edge, fading into the teal toward the text (QR top-left).
 Icons: WhatsApp glyph from Simple Icons (CC0); handset from Material Design Icons (Apache-2.0)."""
 import sys, os, base64, io, glob
 HERE=os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0,HERE)
@@ -44,6 +44,22 @@ body.append(f'<rect width="{W}" height="{H}" fill="{TEAL}"/><rect width="{W}" he
 sym=open(os.path.join(OUT,"logo","alsharq-symbol.png"),"rb").read(); sw,sh=Image.open(io.BytesIO(sym)).size
 SH=68.0; SW=SH*sw/sh; SX=R-SW; SY=22.0
 body.append(f'<image x="{SX:.3f}" y="{SY}" width="{SW:.3f}" height="{SH}" xlink:href="data:image/png;base64,{base64.b64encode(sym).decode()}"/>')
+# ---- optional product cutouts: a large lineup on the left edge, bottom-aligned, fading into the teal toward the text
+CUTS=sorted(glob.glob(os.path.join(os.environ.get("CARD_PRODUCTS_DIR",os.path.join(OUT,"products","cutouts")),"*.png")))[:3]
+if CUTS:
+    import numpy as np
+    S=3.2; CW,CH=150.0,H; FEET=193.0; PH=104.0                       # canvas width, items height, feet line (inside the trim)
+    lefts=[14,48,82]; cv=Image.new("RGBA",(round(CW*S),round(CH*S)),(0,0,0,0))
+    for f,lx in zip(CUTS,lefts):
+        im=Image.open(f).convert("RGBA"); w=PH*im.width/im.height
+        im=im.resize((max(1,round(w*S)),round(PH*S)),Image.LANCZOS)
+        cv.alpha_composite(im,(round(lx*S),round((FEET-PH)*S)))
+    a=np.array(cv); xs=(np.arange(a.shape[1])/S)[None,:]
+    ramp=np.clip((142-xs)/(142-106),0,1)                               # solid until x=106, gone by x=142
+    a[...,3]=(a[...,3]*ramp).astype(np.uint8); cv=Image.fromarray(a)
+    b=io.BytesIO(); cv.save(b,"PNG")
+    body.append(f'<image x="0" y="0" width="{CW}" height="{CH:.3f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>')
+PHOTOS=CUTS
 # ---- name and offer, left of the logo
 TR=SX-14; topw=TR-LEFT
 body.append(right(RK7,"متجر الشرق",fit(RK7,"متجر الشرق",34,topw),STONE,TR,45))
@@ -67,30 +83,17 @@ for i,(path,col,name,num) in enumerate(rows):
     body.append(right(R6,num,SZ_N,STONE,num_right,b))
 cleft=num_right-max(width(R6,r[3],SZ_N) for r in rows)
 # ---- QR on a stone panel (dark modules on light = scans reliably), under the logo side
-QP=68.0; QM=5.0; QX=LEFT; QY=97.0
+QP=52.0; QM=4.0; QX=LEFT; QY=22.0
 body.append(f'<rect x="{QX}" y="{QY}" width="{QP}" height="{QP}" rx="5" fill="{STONE}"/>')
 body.append(qr_rects(QX+QM,QY+QM,QP-2*QM,BAS))
 qc=QX+QP/2
-body.append(center(R5,"امسح للتواصل",9.4,STONE,qc,QY+QP+11))
-body.append(center(R4,"Scan to reach us",8.2,STONE,qc,QY+QP+21))
+body.append(center(R5,"امسح للتواصل",8.6,STONE,qc,QY+QP+10))
 # ---- address and handle, right block
-aw=R-(QX+QP+14)
+aw=R-139.0
 body.append(f'<rect x="{R-aw:.2f}" y="165" width="{aw:.2f}" height=".6" fill="{STONE}" fill-opacity=".45"/>')
 addr="سوق المرادية، آخر سوق الحميدية، دمشق القديمة"
 body.append(right(R4,addr,fit(R4,addr,9.6,aw),STONE,R,176.5))
 body.append(right(R4,HANDLE,9.6,STONE,R,187.5))
-# ---- optional product cutouts, top-left (brand/products/cutouts/*.png, transparent, up to 3; see tools/make_cutouts.py)
-CUTS=sorted(glob.glob(os.path.join(os.environ.get("CARD_PRODUCTS_DIR",os.path.join(OUT,"products","cutouts")),"*.png")))[:3]
-if CUTS:
-    RX0,RW,RBASE,RMAXH,CG=LEFT,88.0,90.0,68.0,3.0
-    ims=[Image.open(f).convert("RGBA") for f in CUTS]
-    asp=[im.width/im.height for im in ims]
-    hh=min(RMAXH,(RW-CG*(len(ims)-1))/sum(asp)); x=RX0+(RW-(hh*sum(asp)+CG*(len(ims)-1)))/2
-    for im,a in zip(ims,asp):
-        S=3.2; w=hh*a; b=io.BytesIO(); im.resize((max(1,round(w*S)),max(1,round(hh*S))),Image.LANCZOS).save(b,"PNG")
-        body.append(f'<image x="{x:.2f}" y="{RBASE-hh:.2f}" width="{w:.2f}" height="{hh:.2f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>'); x+=w+CG
-    body.append(f'<rect x="{RX0}" y="{RBASE+1.5}" width="{RW}" height=".6" fill="{STONE}" fill-opacity=".45"/>')
-PHOTOS=CUTS
 svg=(f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="96mm" height="56mm" viewBox="0 0 {W} {H}">'+"".join(body)+'</svg>')
 k=1452/W; m=round(11.34*k)
 os.makedirs(f"{OUT}/print/v2",exist_ok=True)
