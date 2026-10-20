@@ -63,4 +63,4 @@ For a new design, add `tools/make_card_v3.py` that writes to `print/v3/` and add
 `python tools/make_sheet.py print/v2/alsharq-business-card-v2-mix-print.pdf` puts 8 copies of a card on one A4 page with crop marks at the 90 × 50 mm trim corners (`...-A4-sheet.pdf` and only the card dependencies). Print at 100% / "actual size", never "fit to page". Rebuild the sheet after every card change.
 
 ## Card v2 text colour
-All card v2 text is gold `#EDC967` (`GOLD` at the top of `tools/make_card_v2.py`), so it stands out on the teal and the background photo. The QR panel stays stone so the code scans reliably.
+All card v2 text is metallic gold: a light-to-deep gradient (`#F6E4A6` to `#B98C34`, defined as `#gold` in `tools/make_card_v2.py`) with a soft dark shadow under every letter. A flat gold looked plain yellow and got lost on the photo. Text that should stay out of the gold treatment (the QR panel) is not affected. The QR panel stays stone so the code scans reliably.

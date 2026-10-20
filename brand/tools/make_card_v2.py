@@ -31,7 +31,11 @@ CALL_PATH="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02
 RK7=static_font("ReemKufi-Variable.ttf",700); RK6=static_font("ReemKufi-Variable.ttf",600); R4=static_font("ReadexPro-Variable.ttf",400); R5=static_font("ReadexPro-Variable.ttf",500); R6=static_font("ReadexPro-Variable.ttf",600)
 def width(font,t,size): return shape(font,t,size)["width"]
 def run(font,t,size,fill,x0,base):
-    r=shape(font,t,size); return f'<path transform="translate({x0:.3f} {base:.3f})" fill="{fill}" d="{r["d"]}"/>'
+    r=shape(font,t,size)
+    if fill==GOLD:   # metallic gold: light-to-deep gradient plus a soft dark offset shadow underneath
+        return (f'<path transform="translate({x0+0.45:.3f} {base+0.8:.3f})" fill="#08272B" fill-opacity=".55" d="{r["d"]}"/>'
+                f'<path transform="translate({x0:.3f} {base:.3f})" fill="url(#gold)" d="{r["d"]}"/>')
+    return f'<path transform="translate({x0:.3f} {base:.3f})" fill="{fill}" d="{r["d"]}"/>'
 def right(font,t,size,fill,xr,base): return run(font,t,size,fill,xr-width(font,t,size),base)
 def center(font,t,size,fill,xc,base): return run(font,t,size,fill,xc-width(font,t,size)/2,base)
 def fit(font,t,size,maxw):
@@ -45,6 +49,7 @@ W,H=362.835,211.654; R=W-26; LEFT=26.0
 body=[]
 # ---- ground: the site's teal with a faint eight-point star lattice
 body.append(f'<defs><pattern id="lat" width="44" height="44" patternUnits="userSpaceOnUse"><g fill="none" stroke="{STONE}" stroke-opacity=".10" stroke-width=".6"><rect x="11" y="11" width="22" height="22"/><rect x="11" y="11" width="22" height="22" transform="rotate(45 22 22)"/><circle cx="22" cy="22" r="15.6"/></g></pattern></defs>')
+body.append('<defs><linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E4A6"/><stop offset=".5" stop-color="#DDB85C"/><stop offset="1" stop-color="#B98C34"/></linearGradient></defs>')
 body.append(f'<rect width="{W}" height="{H}" fill="{TEAL}"/><rect width="{W}" height="{H}" fill="url(#lat)"/>')
 # ---- logo symbol (no lettering), straight on the teal, top-right
 sym=open(os.path.join(OUT,"logo","alsharq-symbol.png"),"rb").read(); sw,sh=Image.open(io.BytesIO(sym)).size
