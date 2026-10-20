@@ -47,7 +47,7 @@ This rewrites the files in `print/v1/` (the PDF, the back SVG and both previews)
 pip install -r tools/requirements.txt
 python tools/make_card_v2.py "+963 938 695 132" "0933 917 095" "011 226 3552" "عمر قطرميز" "يوسف قطرميز"
 ```
-Arguments: WhatsApp number, mobile, landline, then the names shown beside the WhatsApp number and the mobile. The landline row shows the label «أرضي». The names and numbers also have defaults at the top of `tools/make_card_v2.py`. Output goes to `print/v2/`: the PDF, the SVG and the preview. Product cutouts, shown large along the left edge, come from `products/cutouts/` (made by `tools/make_cutouts.py`, see `products/README.md`). Text is converted to outlines, so the printer needs no fonts. Version 1 is not changed by this script.
+Arguments: WhatsApp number, mobile, landline, then the names shown beside the WhatsApp number and the mobile. The landline row shows the label «أرضي». The names and numbers also have defaults at the top of `tools/make_card_v2.py`. Output goes to `print/v2/`: the PDF, the SVG and the preview. Add `--background` (anywhere in the command) for the background variant: faded product photos behind the left half instead of the side lineup; its files end in `-v2-background-…`. Product cutouts, shown large along the left edge, come from `products/cutouts/` (made by `tools/make_cutouts.py`, see `products/README.md`). Text is converted to outlines, so the printer needs no fonts. Version 1 is not changed by this script.
 
 ## Card versions
 Each card design has its own folder under `print/`, and the version is in every file name so the printer cannot mix them up.
@@ -55,6 +55,6 @@ Each card design has its own folder under `print/`, and the version is in every 
 | Folder | Design | Built by |
 |---|---|---|
 | `print/v1/` | Two faces: teal front with logo and tagline, white back with QR and contacts. This is the printed card. | `tools/make_card.py` |
-| `print/v2/` | One face on the site's teal with a faint star lattice: logo symbol (no lettering) top-right, name and offer in stone, contacts with the people's names, QR to the website on a stone panel (top-left), product cutouts along the left edge, address. (Earlier drafts with a teal panel and with stone paper are in the git history.) | `tools/make_card_v2.py` |
+| `print/v2/` (two variants: side lineup, and `-background`) | One face on the site's teal with a faint star lattice: logo symbol (no lettering) top-right, name and offer in stone, contacts with the people's names, QR to the website on a stone panel (top-left), product cutouts along the left edge, address. (Earlier drafts with a teal panel and with stone paper are in the git history.) | `tools/make_card_v2.py` |
 
 For a new design, add `tools/make_card_v3.py` that writes to `print/v3/` and add a row here. Do not overwrite an older version.

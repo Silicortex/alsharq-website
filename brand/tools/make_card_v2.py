@@ -11,6 +11,8 @@ from tp import shape, static_font
 import qrcode, cairosvg
 from PIL import Image
 from pypdf import PdfReader, PdfWriter
+BG_MODE="--background" in sys.argv; sys.argv=[a for a in sys.argv if a!="--background"]   # variant: faded product photos behind the left half
+SFX="-background" if BG_MODE else ""
 PHONE=sys.argv[1] if len(sys.argv)>1 else "+963 938 695 132"   # WhatsApp
 CALL =sys.argv[2] if len(sys.argv)>2 else "0933 917 095"        # mobile
 LAND =sys.argv[3] if len(sys.argv)>3 else "011 226 3552"        # Damascus landline
@@ -46,14 +48,32 @@ SH=68.0; SW=SH*sw/sh; SX=R-SW; SY=22.0
 body.append(f'<image x="{SX:.3f}" y="{SY}" width="{SW:.3f}" height="{SH}" xlink:href="data:image/png;base64,{base64.b64encode(sym).decode()}"/>')
 # ---- optional product cutouts: a large lineup on the left edge, bottom-aligned, fading into the teal toward the text
 CUTS=sorted(glob.glob(os.path.join(os.environ.get("CARD_PRODUCTS_DIR",os.path.join(OUT,"products","cutouts")),"*.png")))[:3]
+if BG_MODE:
+    import numpy as np
+    BGP=sorted(glob.glob(os.path.join(OUT,"products","background","*.jpg")))[:3]
+    BW=190.0; S=3.2; th=H/max(1,len(BGP)); OVL=12.0; cv=Image.new("RGBA",(round(BW*S),round(H*S)),(0,0,0,0))
+    for bi,bf in enumerate(BGP):                                       # tiles overlap and cross-fade, so there are no hard seams
+        y0=max(0.0,bi*th-OVL); y1=min(H,(bi+1)*th+OVL); tw,tt=round(BW*S),round((y1-y0)*S)
+        im=Image.open(bf).convert("RGB"); r=min(im.width/tw,im.height/tt); cw,ch=tw*r,tt*r
+        im=im.crop((round((im.width-cw)/2),round((im.height-ch)/2),round((im.width+cw)/2),round((im.height+ch)/2))).resize((tw,tt),Image.LANCZOS).convert("RGBA")
+        ys=(np.arange(tt)/S)[:,None]; fade=np.ones((tt,1))
+        if bi>0: fade=np.minimum(fade,np.clip(ys/(2*OVL),0,1))
+        if bi<len(BGP)-1: fade=np.minimum(fade,np.clip(((y1-y0)-ys)/(2*OVL),0,1))
+        t=np.array(im); t[...,3]=(255*fade[:,0:1].repeat(tw,1)).astype(np.uint8)
+        cv.alpha_composite(Image.fromarray(t),(0,round(y0*S)))
+    a=np.array(cv); xs=(np.arange(a.shape[1])/S)[None,:]
+    a[...,3]=(a[...,3]*0.55*np.clip((BW-xs)/(BW-70),0,1)).astype(np.uint8)   # 55% at the left edge, solid teal again by x=190
+    b=io.BytesIO(); Image.fromarray(a).save(b,"PNG")
+    body.append(f'<image x="0" y="0" width="{BW}" height="{H:.3f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>')
+    CUTS=[]
 if CUTS:
     import numpy as np
     S=3.2; CW,CH=150.0,H; FEET=193.0; PH=104.0                       # canvas width, items height, feet line (inside the trim)
-    lefts=[14,48,82]; cv=Image.new("RGBA",(round(CW*S),round(CH*S)),(0,0,0,0))
-    for f,lx in zip(CUTS,lefts):
-        im=Image.open(f).convert("RGBA"); w=PH*im.width/im.height
-        im=im.resize((max(1,round(w*S)),round(PH*S)),Image.LANCZOS)
-        cv.alpha_composite(im,(round(lx*S),round((FEET-PH)*S)))
+    MAXW,OV=60.0,8.0; cv=Image.new("RGBA",(round(CW*S),round(CH*S)),(0,0,0,0)); cx0=14.0
+    for f in CUTS:
+        im=Image.open(f).convert("RGBA"); sc=min(PH/im.height,MAXW/im.width); w,h=im.width*sc,im.height*sc
+        im=im.resize((max(1,round(w*S)),max(1,round(h*S))),Image.LANCZOS)
+        cv.alpha_composite(im,(round(cx0*S),round((FEET-h)*S))); cx0+=w-OV
     a=np.array(cv); xs=(np.arange(a.shape[1])/S)[None,:]
     ramp=np.clip((142-xs)/(142-106),0,1)                               # solid until x=106, gone by x=142
     a[...,3]=(a[...,3]*ramp).astype(np.uint8); cv=Image.fromarray(a)
@@ -99,8 +119,8 @@ k=1452/W; m=round(11.34*k)
 os.makedirs(f"{OUT}/print/v2",exist_ok=True)
 writer=PdfWriter(); writer.add_page(PdfReader(io.BytesIO(cairosvg.svg2pdf(bytestring=svg.encode()))).pages[0])
 png=Image.open(io.BytesIO(cairosvg.svg2png(bytestring=svg.encode(),output_width=1452))).convert("RGB")
-png.crop((m,m,1452-m,round(H*k)-m)).save(f"{OUT}/print/v2/alsharq-business-card-v2-preview.png")
-with open(f"{OUT}/print/v2/alsharq-business-card-v2-print.pdf","wb") as f: writer.write(f)
-open(f"{OUT}/print/v2/alsharq-business-card-v2.svg","w").write(svg)
-print("card v2 built:", NAME_WA,PHONE,"|",NAME_MOB,CALL,"|",LAND_LABEL,LAND,"| QR ->",URL,"| product cutouts:",len(PHOTOS))
+png.crop((m,m,1452-m,round(H*k)-m)).save(f"{OUT}/print/v2/alsharq-business-card-v2{SFX}-preview.png")
+with open(f"{OUT}/print/v2/alsharq-business-card-v2{SFX}-print.pdf","wb") as f: writer.write(f)
+open(f"{OUT}/print/v2/alsharq-business-card-v2{SFX}.svg","w").write(svg)
+print("variant:", "background" if BG_MODE else "side lineup"); print("card v2 built:", NAME_WA,PHONE,"|",NAME_MOB,CALL,"|",LAND_LABEL,LAND,"| QR ->",URL,"| product cutouts:",len(PHOTOS))
 print("contacts leftmost x=%.1f, QR panel right edge x=%.1f, title block width avail %.1f"%(cleft,QX+QP,topw))
