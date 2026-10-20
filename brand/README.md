@@ -17,7 +17,7 @@
 | `logo/alsharq-profile-picture-1080.png` | Profile picture, symbol only | Small avatars |
 | `social/alsharq-facebook-cover-1640x624.jpg` | Facebook cover | Facebook page |
 | `print/v1/alsharq-business-card-v1-print.pdf` | Business card version 1 (the printed one), 2 pages, 96 × 56 mm incl. 3 mm bleed | For the printer: double-sided, trim to 90 × 50 mm |
-| `print/v2/alsharq-business-card-v2-print.pdf` | Business card version 2, ONE face (everything on the front: logo symbol on a teal tile in the top-right corner, name, offer, contacts with names, address, on the stone star-lattice background), 96 × 56 mm incl. 3 mm bleed | For the printer: single-sided, trim to 90 × 50 mm |
+| `print/v2/alsharq-business-card-v2-print.pdf` | Business card version 2, ONE face (everything on the front: site teal with a faint star lattice, logo symbol top-right, name, offer, contacts with names, QR to the website, address), 96 × 56 mm incl. 3 mm bleed | For the printer: single-sided, trim to 90 × 50 mm |
 | `print/v2/alsharq-business-card-v2-preview.png`, `print/v2/alsharq-business-card-v2.svg` | Version 2 preview, and the vector source | Checking; editing in CorelDraw or Illustrator |
 | `print/v1/*-preview.png`, `print/v1/alsharq-business-card-v1-back.svg` | Version 1 previews, and the back as vector | Checking; editing in CorelDraw or Illustrator |
 | `qr/alsharq-qr-website.*` | QR to the website | Card, sign, bags |
@@ -55,6 +55,6 @@ Each card design has its own folder under `print/`, and the version is in every 
 | Folder | Design | Built by |
 |---|---|---|
 | `print/v1/` | Two faces: teal front with logo and tagline, white back with QR and contacts. This is the printed card. | `tools/make_card.py` |
-| `print/v2/` | One face on stone star-lattice paper: logo symbol (no lettering) on a teal tile top-right, name and offer, contacts with the people's names, address. (An earlier draft with a teal logo panel on the left is in the git history.) | `tools/make_card_v2.py` |
+| `print/v2/` | One face on the site's teal with a faint star lattice: logo symbol (no lettering) top-right, name and offer in stone, contacts with the people's names, QR to the website on a stone panel, address. (Earlier drafts with a teal panel and with stone paper are in the git history.) | `tools/make_card_v2.py` |
 
 For a new design, add `tools/make_card_v3.py` that writes to `print/v3/` and add a row here. Do not overwrite an older version.
