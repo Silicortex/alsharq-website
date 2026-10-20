@@ -1,4 +1,4 @@
-"""Usage: python tools/make_card_v2.py "<WhatsApp>" "<mobile>" "<landline>" ["<WhatsApp contact name>" "<mobile contact name>"]
+"""Usage: python tools/make_card_v2.py "<WhatsApp>" "<mobile>" ["<landline>"] ["<WhatsApp contact name>" "<mobile contact name>"]
        e.g. python tools/make_card_v2.py "+963 938 695 132" "0933 917 095" "011 226 3552"
 Al Sharq business card, version 2: ONE face, 96x56 mm incl. 3 mm bleed (trim 90x50 mm), outlined text.
 Layout: site teal ground with a faint star lattice; logo symbol (no lettering) top-right, straight on the teal;
@@ -16,7 +16,7 @@ MIX_MODE="--mix" in sys.argv; sys.argv=[a for a in sys.argv if a!="--mix"]      
 SFX="-background" if BG_MODE else ("-mix" if MIX_MODE else "")
 PHONE=sys.argv[1] if len(sys.argv)>1 else "+963 938 695 132"   # WhatsApp
 CALL =sys.argv[2] if len(sys.argv)>2 else "0933 917 095"        # mobile
-LAND =sys.argv[3] if len(sys.argv)>3 else "011 226 3552"        # Damascus landline
+LAND =sys.argv[3] if len(sys.argv)>3 else ""                    # Damascus landline: NOT on the card unless given (e.g. "011 226 3552")
 NAME_WA =sys.argv[4] if len(sys.argv)>4 else "عمر قطرميز"        # person behind the WhatsApp number
 NAME_MOB=sys.argv[5] if len(sys.argv)>5 else "يوسف قطرميز"       # person behind the mobile number
 LAND_LABEL="أرضي"                                                # landline has no person, so a plain label
@@ -110,13 +110,14 @@ for li,items in enumerate(OFF_LINES):
 TAG="حيث تنتهي الحميدية… يبدأ الشرق"
 body.append(right(RK6,TAG,fit(RK6,TAG,13,R-LEFT),STONE,R,104))
 # ---- contacts: icon | name | number
-ICON=13.0; GAP=7.0
-rows=[(WA_PATH,"#25D366",NAME_WA,PHONE),(CALL_PATH,QAMAR,NAME_MOB,CALL),(CALL_PATH,QAMAR,LAND_LABEL,LAND)]
-SZ_N=11.5; SZ_T=10.5
+ICON=15.0; GAP=6.0
+rows=[(WA_PATH,"#25D366",NAME_WA,PHONE),(CALL_PATH,QAMAR,NAME_MOB,CALL)]
+if LAND: rows.append((CALL_PATH,QAMAR,LAND_LABEL,LAND))
+SZ_N=12.0; SZ_T=10.5
 name_w=max(width(R5,r[2],SZ_T) for r in rows)
-name_right=R-ICON-GAP; num_right=name_right-name_w-12
+name_right=R-ICON-GAP; num_right=name_right-name_w-10
 for i,(path,col,name,num) in enumerate(rows):
-    b=124+15.5*i
+    b=(128+20*i) if len(rows)==2 else (124+15.5*i)
     body.append(f'<rect x="{R-ICON:.2f}" y="{b-ICON+3:.2f}" width="{ICON}" height="{ICON}" rx="3.2" fill="{col}"/>')
     s=(ICON*0.62)/24; ox=R-ICON+ICON*0.19; oy=b-ICON+3+ICON*0.19
     body.append(f'<path transform="translate({ox:.3f} {oy:.3f}) scale({s:.4f})" fill="#fff" d="{path}"/>')
@@ -148,5 +149,5 @@ png=Image.open(io.BytesIO(cairosvg.svg2png(bytestring=svg.encode(),output_width=
 png.crop((m,m,1452-m,round(H*k)-m)).save(f"{OUT}/print/v2/alsharq-business-card-v2{SFX}-preview.png")
 with open(f"{OUT}/print/v2/alsharq-business-card-v2{SFX}-print.pdf","wb") as f: writer.write(f)
 open(f"{OUT}/print/v2/alsharq-business-card-v2{SFX}.svg","w").write(svg)
-print("variant:", "background" if BG_MODE else ("mix" if MIX_MODE else "side lineup")); print("card v2 built:", NAME_WA,PHONE,"|",NAME_MOB,CALL,"|",LAND_LABEL,LAND,"| QR ->",URL,"| product cutouts:",len(PHOTOS))
+print("variant:", "background" if BG_MODE else ("mix" if MIX_MODE else "side lineup")); print("card v2 built:", NAME_WA,PHONE,"|",NAME_MOB,CALL,"|",(LAND_LABEL+" "+LAND) if LAND else "no landline","| QR ->",URL,"| product cutouts:",len(PHOTOS))
 print("contacts leftmost x=%.1f, QR panel right edge x=%.1f, title block width avail %.1f"%(cleft,QX+QP,topw))

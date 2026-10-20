@@ -4,7 +4,7 @@
 
 - Website: https://alsharq-damascus.vercel.app
 - WhatsApp: +963 938 695 132 · https://wa.me/963938695132
-- Calls: mobile 0933 917 095 · landline 011 226 3552 (on the card and on the website)
+- Calls: mobile 0933 917 095 · landline 011 226 3552 (card v1 and the website show both; card v2 shows the mobile only)
 - Instagram / Facebook: @alsharq.damascus
 
 ## Files
@@ -45,9 +45,9 @@ This rewrites the files in `print/v1/` (the PDF, the back SVG and both previews)
 ## Rebuild business card version 2 (one face, names beside the numbers)
 ```bash
 pip install -r tools/requirements.txt
-python tools/make_card_v2.py "+963 938 695 132" "0933 917 095" "011 226 3552" "عمر قطرميز" "يوسف قطرميز"
+python tools/make_card_v2.py "+963 938 695 132" "0933 917 095" "" "عمر قطرميز" "يوسف قطرميز"
 ```
-Arguments: WhatsApp number, mobile, landline, then the names shown beside the WhatsApp number and the mobile. The landline row shows the label «أرضي». The names and numbers also have defaults at the top of `tools/make_card_v2.py`. Output goes to `print/v2/`: the PDF, the SVG and the preview. Add `--background` (anywhere in the command) for the background variant: the souq background image (`products/background/background-image.png`) behind the left half instead of the side lineup; its files end in `-v2-background-…`. Add `--mix` for the mixed variant: the background image across the whole card plus the three cutouts crisp in front with a soft shadow; its files end in `-v2-mix-…`. Product cutouts, shown large along the left edge, come from `products/cutouts/` (made by `tools/make_cutouts.py`, see `products/README.md`). Text is converted to outlines, so the printer needs no fonts. Version 1 is not changed by this script.
+Arguments: WhatsApp number, mobile, landline, then the names shown beside the WhatsApp number and the mobile. Card v2 does not show the landline: pass `""` (or omit it) to leave it off, or give a number to add a third row labelled «أرضي». The names and numbers also have defaults at the top of `tools/make_card_v2.py`. Output goes to `print/v2/`: the PDF, the SVG and the preview. Add `--background` (anywhere in the command) for the background variant: the souq background image (`products/background/background-image.png`) behind the left half instead of the side lineup; its files end in `-v2-background-…`. Add `--mix` for the mixed variant: the background image across the whole card plus the three cutouts crisp in front with a soft shadow; its files end in `-v2-mix-…`. Product cutouts, shown large along the left edge, come from `products/cutouts/` (made by `tools/make_cutouts.py`, see `products/README.md`). Text is converted to outlines, so the printer needs no fonts. Version 1 is not changed by this script.
 
 ## Card versions
 Each card design has its own folder under `print/`, and the version is in every file name so the printer cannot mix them up.
