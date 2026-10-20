@@ -48,7 +48,6 @@ body.append(f'<rect width="{W}" height="{H}" fill="{TEAL}"/><rect width="{W}" he
 # ---- logo symbol (no lettering), straight on the teal, top-right
 sym=open(os.path.join(OUT,"logo","alsharq-symbol.png"),"rb").read(); sw,sh=Image.open(io.BytesIO(sym)).size
 SH=66.0; SW=SH*sw/sh; SX=R-SW; SY=24.0
-body.append(f'<image x="{SX:.3f}" y="{SY}" width="{SW:.3f}" height="{SH}" xlink:href="data:image/png;base64,{base64.b64encode(sym).decode()}"/>')
 # ---- optional product cutouts: a large lineup on the left edge, bottom-aligned, fading into the teal toward the text
 CUTS=sorted(glob.glob(os.path.join(os.environ.get("CARD_PRODUCTS_DIR",os.path.join(OUT,"products","cutouts")),"*.png")))[:3]
 if BG_MODE or MIX_MODE:
@@ -65,7 +64,7 @@ if BG_MODE or MIX_MODE:
         t=np.array(im); t[...,3]=(255*fade[:,0:1].repeat(tw,1)).astype(np.uint8)
         cv.alpha_composite(Image.fromarray(t),(0,round(y0*S)))
     a=np.array(cv); xs=(np.arange(a.shape[1])/S)[None,:]
-    if MIX_MODE: a[...,3]=(a[...,3]*(0.30-0.20*xs/W)).astype(np.uint8)         # whole card: 30% at the left edge down to 10% at the right
+    if MIX_MODE: a[...,3]=(a[...,3]*(0.70-0.38*xs/W)).astype(np.uint8)         # whole card: 70% at the left edge down to 32% at the right
     else: a[...,3]=(a[...,3]*0.55*np.clip((BW-xs)/(BW-70),0,1)).astype(np.uint8)   # 55% at the left edge, solid teal again by x=190
     b=io.BytesIO(); Image.fromarray(a).save(b,"PNG")
     body.append(f'<image x="0" y="0" width="{BW}" height="{H:.3f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>')
@@ -93,6 +92,8 @@ if CUTS:
     b=io.BytesIO(); cv.save(b,"PNG")
     body.append(f'<image x="0" y="0" width="{CW}" height="{CH:.3f}" xlink:href="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}"/>')
 PHOTOS=CUTS
+# logo symbol drawn above the background photos so they never veil it
+body.append(f'<image x="{SX:.3f}" y="{SY}" width="{SW:.3f}" height="{SH}" xlink:href="data:image/png;base64,{base64.b64encode(sym).decode()}"/>')
 # ---- name and offer, left of the logo
 TR=SX-14; topw=TR-LEFT
 body.append(right(RK7,"متجر الشرق",fit(RK7,"متجر الشرق",32,topw),STONE,TR,46))
